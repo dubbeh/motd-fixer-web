@@ -13,7 +13,7 @@
 class MOTDServer
 {
     private $dbh;
-    private $motdh
+    private $motdh;
     var $ip;
     var $port;
     var $token;
