@@ -17,8 +17,12 @@ class MOTDClient
     private $server;
     private $motdh;
     private $steamid64;
-    private $url;
     private $ip;
+    private $panel_title;
+    private $panel_url;
+    private $panel_hidden;
+    private $panel_width;
+    private $panel_height;
     
     public function __construct($dbh, $server, $motdh)
     {
@@ -29,23 +33,31 @@ class MOTDClient
 
     public function is_valid ($check_url = true)
     {
-        return ($this->steamid64) && ($this->ip) && ($check_url ? $this->url : true);
+        return ($this->steamid64) && ($this->ip) && ($check_url ? $this->panel_url : true);
     }
 
     public function register_url ()
     {
         $this->steamid64 = filter_input(INPUT_POST, "steamid64", FILTER_SANITIZE_STRING);
         $this->ip = ip2long(filter_input(INPUT_POST, "clientip", FILTER_VALIDATE_IP));
-        $this->url = filter_input (INPUT_POST, "url", FILTER_VALIDATE_URL);
+        $this->panel_url = filter_input (INPUT_POST, "panel_url", FILTER_VALIDATE_URL);
+        $this->panel_title = filter_input(INPUT_POST, "panel_title", FILTER_SANITIZE_STRING);
+        $this->panel_hidden = filter_input(INPUT_POST, "panel_hidden", FILTER_VALIDATE_INT);
+        $this->panel_width = filter_input(INPUT_POST, "panel_width", FILTER_VALIDATE_INT);
+        $this->panel_height = filter_input(INPUT_POST, "panel_height", FILTER_VALIDATE_INT);
 
         if ($this->server->is_valid(true) && $this->server->is_token_valid() && $this->is_valid()) {
-            $result = $this->dbh->query("INSERT INTO ".LINKS_TABLE_NAME." (steamid64, url, client_ip, server_ip, server_port, created_at)" .
-                " VALUES (:steamid64, :url, :client_ip, :server_ip, :server_port, :created_at)")
+            $result = $this->dbh->query("INSERT INTO ".LINKS_TABLE_NAME." (steamid64, panel_url, client_ip, server_ip, server_port, panel_title, panel_hidden, panel_width, panel_height, created_at)" .
+                " VALUES (:steamid64, :panel_url, :client_ip, :server_ip, :server_port, :panel_title, :panel_hidden, :panel_width, :panel_height, :created_at)")
                 ->bind(":steamid64", $this->steamid64)
-                ->bind(":url", $this->url)
+                ->bind(":panel_url", $this->panel_url)
                 ->bind(":client_ip", $this->ip)
                 ->bind(":server_ip", $this->server->ip)
                 ->bind(":server_port", $this->server->port)
+                ->bind(":panel_title", $this->panel_title)
+                ->bind(":panel_hidden", $this->panel_hidden)
+                ->bind(":panel_width", $this->panel_width)
+                ->bind(":panel_height", $this->panel_height)
                 ->bind(":created_at", time())
                 ->execute();
             
@@ -66,8 +78,18 @@ class MOTDClient
                 ->bind(":client_ip", $this->ip)
                 ->single();
             if ($result) {
-                $this->url = $result["url"];
-                printf("<object width=\"960\" height=\"700\" data=\"%s\" type=\"text/html\"></object>", $this->url);
+                $this->panel_url = $result["panel_url"];
+                if ($result["panel_hidden"]) {
+                    printf("<object width=\"960\" height=\"700\" data=\"%s\" type=\"text/html\"></object>", $this->panel_url);
+                } else {
+                    printf("<script type=\"text/javascript\">".
+                        "window.open(\"%s\", \"_blank\", \"toolbar=yes, fullscreen=yes, scrollbars=yes, width=%d, height=%d\");".
+                        "</script>",
+                        $this->panel_url,
+                        $result["panel_width"],
+                        $result["panel_height"]);
+                }
+
                 $this->delete_urls($result["steamid64"]);
             }
         }

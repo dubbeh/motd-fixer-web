@@ -16,11 +16,16 @@ class MOTDHelpers
     /*
 	 * Gets the real IP address even when behind a CloudFlare proxy
 	 */
-	public function get_real_ip ()
+	public function get_real_ip ($no_conversion = false)
 	{
-		return ip2long(filter_var(
-			isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR']
-			, FILTER_VALIDATE_IP));
+        $ip = filter_var(
+                isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'],
+            FILTER_VALIDATE_IP);
+
+        if ($no_conversion == true)
+            return $ip;
+        else
+            return ip2long($ip);
 	}
 
     /*

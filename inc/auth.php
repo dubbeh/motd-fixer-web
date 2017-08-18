@@ -80,8 +80,9 @@ class MOTDAuth {
         $this->motdh->create_response(0, false, "Auth unknown usage", false);
     }
 
+    // Fix this to use ip2long for IP comparison
     private function is_ip_allowed() {
-        return in_array($this->motdh->get_real_ip(), AUTH_ALLOWED_IPS);
+        return in_array($this->motdh->get_real_ip(true), AUTH_ALLOWED_IPS);
     }
 }
 
