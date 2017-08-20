@@ -1,2 +1,4 @@
-# motd-fixer-web
-MOTD Fixer PHP Webscript
+# MOTD Fixer - PHP Webscript
+
+## Full documentation
+https://dubbeh.net/sourcemod-plugins/motd-fixer/
