@@ -39,7 +39,7 @@ class MOTDClient
     public function register_url ()
     {
         $this->steamid64 = filter_input(INPUT_POST, "steamid64", FILTER_SANITIZE_STRING);
-        $this->ip = ip2long(filter_input(INPUT_POST, "clientip", FILTER_VALIDATE_IP));
+        $this->ip = filter_input(INPUT_POST, "clientip", FILTER_VALIDATE_IP);
         $this->panel_url = filter_input (INPUT_POST, "panel_url", FILTER_VALIDATE_URL);
         $this->panel_title = filter_input(INPUT_POST, "panel_title", FILTER_SANITIZE_STRING);
         $this->panel_hidden = filter_input(INPUT_POST, "panel_hidden", FILTER_VALIDATE_INT);

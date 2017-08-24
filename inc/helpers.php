@@ -16,20 +16,15 @@ class MOTDHelpers
     /*
 	 * Gets the real IP address even when behind a CloudFlare proxy
 	 */
-	public function get_real_ip ($no_conversion = false)
+	public function get_real_ip ()
 	{
-        $ip = filter_var(
+        return filter_var(
                 isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'],
             FILTER_VALIDATE_IP);
-
-        if ($no_conversion == true)
-            return $ip;
-        else
-            return ip2long($ip);
 	}
 
     /*
-     * Returns the filename from an absolute path
+     * Returns the calling script filename
      */
     public function get_script_filename ()
     {

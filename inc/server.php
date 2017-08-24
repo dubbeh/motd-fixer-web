@@ -25,11 +25,11 @@ class MOTDServer
         $this->motdh = $motdh;
         
         if ($this->motdh->get_script_filename() == "redirect.php") {
-            $this->ip = ip2long(filter_input(INPUT_GET, "serverip", FILTER_VALIDATE_IP));
+            $this->ip = filter_input(INPUT_GET, "serverip", FILTER_VALIDATE_IP);
             $this->port = filter_input(INPUT_GET, "serverport", FILTER_VALIDATE_INT);
             $this->token = $this->get_token();
         } else if ($this->motdh->get_script_filename() == "register.php") {
-            $this->ip = ip2long(filter_input(INPUT_POST, "serverip", FILTER_VALIDATE_IP));
+            $this->ip = filter_input(INPUT_POST, "serverip", FILTER_VALIDATE_IP);
             $this->port = filter_input(INPUT_POST, "serverport", FILTER_VALIDATE_INT);
             $this->token = filter_input(INPUT_POST, "servertoken", FILTER_SANITIZE_STRING);
             $this->name = filter_input(INPUT_POST, "servername", FILTER_SANITIZE_STRING);
