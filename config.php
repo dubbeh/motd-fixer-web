@@ -26,9 +26,15 @@ define("AUTH_REGISTRATION", "1");
 define("AUTH_IP", "2");
 
 // Auth type
+// Set AUTH_REGISTRATION for token based authentication
+// Set AUTH_IP for IP based authentication
 define("AUTH_TYPE", AUTH_REGISTRATION);
 
-// Allowed IP's
+// Set the allowed IP's here when using:
+// define("AUTH_TYPE", AUTH_IP);
+// This array is checked for the allowed IP's to to use the script
+// Make sure to have PHP7+ to support defined arrays
+// To check your external/internal server IP - Run "motdf_serverip" inside the SourceMod plugin and put it here
 define("AUTH_ALLOWED_IPS", array (
 	"127.0.0.1",
 	"192.168.0.1"));

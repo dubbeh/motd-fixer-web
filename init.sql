@@ -3,8 +3,9 @@ CREATE TABLE IF NOT EXISTS links (
 	steamid64 BIGINT UNSIGNED,
 	panel_url VARCHAR(255),
 	client_ip VARCHAR(65),
-	server_ip VARCHAR(65),
-	server_port INT UNSIGNED,
+	sent_ip VARCHAR(65),
+	sent_port INT UNSIGNED,
+	real_ip VARCHAR(65),
 	panel_title VARCHAR(64),
 	panel_hidden TINYINT(1),
 	panel_width INT UNSIGNED,
@@ -14,10 +15,11 @@ CREATE TABLE IF NOT EXISTS links (
 
 CREATE TABLE IF NOT EXISTS servers (
 	ind INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(64),
-	ip VARCHAR(65),
-	port INT UNSIGNED,
-	token VARCHAR(65),
+	server_name VARCHAR(64),
+	sent_ip VARCHAR(65),
+	sent_port INT UNSIGNED,
+	real_ip VARCHAR(65),
+	server_token VARCHAR(65),
 	is_blocked TINYINT(1),
 	created_at BIGINT UNSIGNED
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
