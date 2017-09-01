@@ -32,9 +32,7 @@ class MOTDAuth {
         $this->server = new MOTDServer($this->dbh, $this->motdh);
         $this->client = new MOTDClient($this->dbh, $this->server, $this->motdh);
 
-        if ($this->motdh->get_script_filename() == "motdf_cron.php") {
-            $this->server->clean_db();
-        } else if (AUTH_TYPE == AUTH_REGISTRATION) {
+        if (AUTH_TYPE == AUTH_REGISTRATION) {
             return $this->auth_registration();
         } else if (AUTH_TYPE == AUTH_IP) {
             return $this->auth_ip();

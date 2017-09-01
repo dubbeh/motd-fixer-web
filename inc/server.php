@@ -99,11 +99,17 @@ class MOTDServer
 
     public function is_blocked ()
     {
-        $result = $this->dbh->query("SELECT is_blocked FROM ".SERVERS_TABLE_NAME." WHERE sent_ip = :sent_ip AND sent_port = :sent_port AND real_ip = :real_ip")
-                ->bind(":sent_ip", $this->sent_ip)
-                ->bind(":sent_port", $this->sent_port)
-                ->bind(":real_ip", $this->real_ip)
-                ->single();
+        $result = $this->dbh->query("SELECT is_blocked FROM ".SERVERS_TABLE_NAME.
+            " WHERE".
+            " sent_ip = :sent_ip".
+            " AND".
+            " sent_port = :sent_port".
+            " AND".
+            " real_ip = :real_ip")
+            ->bind(":sent_ip", $this->sent_ip)
+            ->bind(":sent_port", $this->sent_port)
+            ->bind(":real_ip", $this->real_ip)
+            ->single();
         if ($result) {
             return $result["is_blocked"];
         } else {
@@ -113,11 +119,17 @@ class MOTDServer
 
     public function is_in_db ()
     {
-        $result = $this->dbh->query("SELECT ind FROM ".SERVERS_TABLE_NAME." WHERE sent_ip = :sent_ip AND sent_port = :sent_port AND real_ip = :real_ip")
-                ->bind(":sent_ip", $this->sent_ip)
-                ->bind(":sent_port", $this->sent_port)
-                ->bind(":real_ip", $this->real_ip)
-                ->executeRows();
+        $result = $this->dbh->query("SELECT ind FROM ".SERVERS_TABLE_NAME.
+            " WHERE".
+            " sent_ip = :sent_ip".
+            " AND".
+            " sent_port = :sent_port".
+            " AND".
+            " real_ip = :real_ip")
+            ->bind(":sent_ip", $this->sent_ip)
+            ->bind(":sent_port", $this->sent_port)
+            ->bind(":real_ip", $this->real_ip)
+            ->executeRows();
         if ($result) {
             return true;
         } else {
@@ -127,11 +139,17 @@ class MOTDServer
 
     public function get_token ()
     {
-        $result = $this->dbh->query("SELECT server_token FROM ".SERVERS_TABLE_NAME." WHERE sent_ip = :sent_ip AND sent_port = :sent_port AND real_ip = :real_ip")
-                ->bind(":sent_ip", $this->sent_ip)
-                ->bind(":sent_port", $this->sent_port)
-                ->bind(":real_ip", $this->real_ip)
-                ->single();
+        $result = $this->dbh->query("SELECT server_token FROM ".SERVERS_TABLE_NAME.
+            " WHERE".
+            " sent_ip = :sent_ip".
+            " AND".
+            " sent_port = :sent_port".
+            " AND".
+            " real_ip = :real_ip")
+            ->bind(":sent_ip", $this->sent_ip)
+            ->bind(":sent_port", $this->sent_port)
+            ->bind(":real_ip", $this->real_ip)
+            ->single();
         if ($result) {
             return $result["server_token"];
         } else {
@@ -160,7 +178,10 @@ class MOTDServer
 
     public function add_to_db ()
     {
-        return $this->dbh->query("INSERT INTO ".SERVERS_TABLE_NAME." (server_name, sent_ip, sent_port, real_ip, server_token, is_blocked, created_at) VALUES (:server_name, :sent_ip, :sent_port, :real_ip, :server_token, :is_blocked, :created_at)")
+        return $this->dbh->query("INSERT INTO ".SERVERS_TABLE_NAME.
+                " (server_name, sent_ip, sent_port, real_ip, server_token, is_blocked, created_at)".
+                " VALUES".
+                " (:server_name, :sent_ip, :sent_port, :real_ip, :server_token, :is_blocked, :created_at)")
             ->bind(":server_name", $this->server_name)
             ->bind(":sent_ip", $this->sent_ip)
             ->bind(":sent_port", $this->sent_port)
@@ -173,16 +194,12 @@ class MOTDServer
 
     public function cleanup_db ()
     {
-        // Cleanup old server entries - anything over 90 days
-        $count = $this->dbh->query("DELETE FROM ".SERVERS_TABLE_NAME." WHERE created_at <= :created_at")
-            ->bind (":created_at", time() + 7776000)
-            ->resultsetNum();
-        printf("Deleted %d old server entries from  the database\n", $count);
-
         // Cleanup old link entries - anything older than 1 hour
-        $count = $this->dbh->query("DELETE FROM ".LINKS_TABLE_NAME." WHERE created_at <= :created_at")
-            ->bind (":created_at", time() + 36400)
-            ->resultsetNum();
+        $count = $this->dbh->query("DELETE FROM ".LINKS_TABLE_NAME.
+            " WHERE".
+            " created_at <= :created_at")
+            ->bind (":created_at", time() + 3600)
+            ->resultset();
         printf("Deleted %d old links entries from the database\n", $count);
     }
 }

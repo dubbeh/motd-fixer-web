@@ -49,8 +49,8 @@ class MOTDClient
         if ($this->server->is_valid(true) && $this->server->is_token_valid() && $this->is_valid(true)) {
             $result = $this->dbh->query("INSERT INTO ".LINKS_TABLE_NAME.
                 " (steamid64, panel_url, client_ip, sent_ip, sent_port, panel_title, panel_hidden, panel_width, panel_height, created_at)".
-                " VALUES ".
-                "(:steamid64, :panel_url, :client_ip, :server_ip, :server_port, :panel_title, :panel_hidden, :panel_width, :panel_height, :created_at)")
+                " VALUES".
+                " (:steamid64, :panel_url, :client_ip, :server_ip, :server_port, :panel_title, :panel_hidden, :panel_width, :panel_height, :created_at)")
                 ->bind(":steamid64", $this->steamid64)
                 ->bind(":panel_url", $this->panel_url)
                 ->bind(":client_ip", $this->client_ip)
@@ -79,7 +79,11 @@ class MOTDClient
         }
 
         if ($this->is_valid(false)) {
-            $result = $this->dbh->query("SELECT * FROM ".LINKS_TABLE_NAME." WHERE steamid64 = :steamid64 AND client_ip = :client_ip")
+            $result = $this->dbh->query("SELECT * FROM ".LINKS_TABLE_NAME.
+                " WHERE".
+                " steamid64 = :steamid64".
+                " AND".
+                " client_ip = :client_ip")
                 ->bind(":steamid64", $this->steamid64)
                 ->bind(":client_ip", $this->client_ip)
                 ->single();
@@ -102,7 +106,9 @@ class MOTDClient
     }
 
     public function delete_urls ($steamid64) {
-        return $this->dbh->query("DELETE FROM ".LINKS_TABLE_NAME." WHERE steamid64 = :steamid64")
+        return $this->dbh->query("DELETE FROM ".LINKS_TABLE_NAME.
+            " WHERE".
+            " steamid64 = :steamid64")
             ->bind(":steamid64", $steamid64)
             ->execute();
     }
