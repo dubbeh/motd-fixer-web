@@ -11,6 +11,6 @@
  *
  */
 
-echo "Hello!";
+echo "MOTD Fixer!";
 
 ?>

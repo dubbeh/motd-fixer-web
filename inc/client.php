@@ -36,7 +36,7 @@ class MOTDClient
         return ($this->steamid64) && ($this->client_ip) && ($check_url ? $this->panel_url : true);
     }
 
-    public function register_url ()
+    public function register_url ($is_token_auth = true)
     {
         $this->steamid64 = filter_input(INPUT_POST, "steamid64", FILTER_SANITIZE_STRING);
         $this->client_ip = filter_input(INPUT_POST, "clientip", FILTER_VALIDATE_IP);
@@ -46,7 +46,7 @@ class MOTDClient
         $this->panel_width = filter_input(INPUT_POST, "panel_width", FILTER_VALIDATE_INT);
         $this->panel_height = filter_input(INPUT_POST, "panel_height", FILTER_VALIDATE_INT);
 
-        if ($this->server->is_valid(true) && $this->server->is_token_valid() && $this->is_valid(true)) {
+        if ($this->server->is_valid(true) && $this->server->is_token_valid($is_token_auth) && $this->is_valid(true)) {
             $result = $this->dbh->query("INSERT INTO ".LINKS_TABLE_NAME.
                 " (steamid64, panel_url, client_ip, sent_ip, sent_port, panel_title, panel_hidden, panel_width, panel_height, created_at)".
                 " VALUES".
@@ -105,7 +105,8 @@ class MOTDClient
         }
     }
 
-    public function delete_urls ($steamid64) {
+    public function delete_urls ($steamid64)
+    {
         return $this->dbh->query("DELETE FROM ".LINKS_TABLE_NAME.
             " WHERE".
             " steamid64 = :steamid64")

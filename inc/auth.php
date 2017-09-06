@@ -26,29 +26,29 @@ class MOTDAuth {
     private $client;
     private $motdh;
 
-    public function auth_run() {
+    public function auth_run()
+    {
         $this->dbh = new MOTDDB();
         $this->motdh = new MOTDHelpers();
         $this->server = new MOTDServer($this->dbh, $this->motdh);
         $this->client = new MOTDClient($this->dbh, $this->server, $this->motdh);
 
         if (AUTH_TYPE == AUTH_REGISTRATION) {
-            return $this->auth_registration();
+            $this->auth_registration();
         } else if (AUTH_TYPE == AUTH_IP) {
-            return $this->auth_ip();
+            $this->auth_ip();
         }
-
-        return false;
     }
 
-    private function auth_ip() {
+    private function auth_ip()
+    {
         if ($this->is_ip_allowed()) {
             if ($this->motdh->get_script_filename() == "register.php") {
                 if (filter_input(INPUT_GET, "server", FILTER_VALIDATE_BOOLEAN) == true) {
                     $this->motdh->create_response(0, false, "No need to register using IP based authentication.", false);
                     return;
                 } else if (filter_input(INPUT_GET, "client", FILTER_VALIDATE_BOOLEAN) == true) {
-                    $this->client->register_url();
+                    $this->client->register_url(false);
                     return;
                 }
             } else if ($this->motdh->get_script_filename() == "redirect.php") {
@@ -61,12 +61,13 @@ class MOTDAuth {
         }
     }
 
-    private function auth_registration() {
+    private function auth_registration()
+    {
         if ($this->motdh->get_script_filename() == "register.php" && $this->server->is_valid(true)) {
             if (filter_input(INPUT_GET, "server", FILTER_VALIDATE_BOOLEAN) == true) {
                 $this->server->register();
             } else if (filter_input(INPUT_GET, "client", FILTER_VALIDATE_BOOLEAN) == true) {
-                $this->client->register_url();
+                $this->client->register_url(true);
             }
 
             return;
@@ -78,7 +79,8 @@ class MOTDAuth {
         $this->motdh->create_response(0, false, "Auth unknown usage", false);
     }
 
-    private function is_ip_allowed() {
+    private function is_ip_allowed()
+    {
         return in_array($this->motdh->get_real_ip(), AUTH_ALLOWED_IPS);
     }
 }
