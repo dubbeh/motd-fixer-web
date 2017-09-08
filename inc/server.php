@@ -50,23 +50,20 @@ class MOTDServer
                     $this->motdh->create_response(
                     $this->get_token(),
                     false,
-                    "Server already found in DB.".
-                    " Sending current token.",
+                    "Server already found in DB. Sending current token.",
                     true);
             } else if ($this->is_in_db() && $this->is_blocked()) {
                     $this->motdh->create_response(
                     0,
                     true,
-                    "Server appears to be blocked.".
-                    " Possibly for abuse?",
+                    "Server appears to be blocked. Possibly for abuse?",
                     false);
             } else if (!$this->is_in_db()) {
                 if ($this->generate_token() && $this->add_to_db()) {
                     $this->motdh->create_response(
                         $this->server_token,
                         false,
-                        "Server Registered Sucessfully.".
-                        " Keep the server token in a safe place.",
+                        "Server Registered Sucessfully. Keep the server token in a safe place.",
                         true);
                 } else {
                     $this->motdh->create_response(
@@ -160,13 +157,15 @@ class MOTDServer
         }
     }
 
-    public function is_token_valid ($is_token_auth)
+    public function is_token_valid ()
     {
-        if ($is_token_auth) {
+        if (AUTH_TYPE == AUTH_REGISTRATION) {
             return $this->get_token() == $this->server_token;
-        } else {
+        } else if  (AUTH_TYPE == AUTH_IP) {
             return true;
         }
+
+        return false;
     }
 
     public function generate_token ()

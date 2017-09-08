@@ -48,7 +48,7 @@ class MOTDAuth {
                     $this->motdh->create_response(0, false, "No need to register using IP based authentication.", false);
                     return;
                 } else if (filter_input(INPUT_GET, "client", FILTER_VALIDATE_BOOLEAN) == true) {
-                    $this->client->register_url(false);
+                    $this->client->register_url();
                     return;
                 }
             } else if ($this->motdh->get_script_filename() == "redirect.php") {
@@ -67,7 +67,7 @@ class MOTDAuth {
             if (filter_input(INPUT_GET, "server", FILTER_VALIDATE_BOOLEAN) == true) {
                 $this->server->register();
             } else if (filter_input(INPUT_GET, "client", FILTER_VALIDATE_BOOLEAN) == true) {
-                $this->client->register_url(true);
+                $this->client->register_url();
             }
 
             return;
