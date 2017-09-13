@@ -43,7 +43,7 @@ class MOTDAuth {
     private function auth_ip()
     {
         if ($this->is_ip_allowed()) {
-            if ($this->motdh->get_script_filename() == "register.php") {
+            if ($_SERVER["PHP_SELF"] == "register.php") {
                 if (filter_input(INPUT_GET, "server", FILTER_VALIDATE_BOOLEAN) == true) {
                     $this->motdh->create_response(0, false, "No need to register using IP based authentication.", false);
                     return;
@@ -51,7 +51,7 @@ class MOTDAuth {
                     $this->client->register_url();
                     return;
                 }
-            } else if ($this->motdh->get_script_filename() == "redirect.php") {
+            } else if ($_SERVER["PHP_SELF"] == "redirect.php") {
                 $this->client->load_url();
                 return;
             }
@@ -63,7 +63,7 @@ class MOTDAuth {
 
     private function auth_registration()
     {
-        if ($this->motdh->get_script_filename() == "register.php" && $this->server->is_valid(true)) {
+        if ($_SERVER["PHP_SELF"] == "register.php" && $this->server->is_valid(true)) {
             if (filter_input(INPUT_GET, "server", FILTER_VALIDATE_BOOLEAN) == true) {
                 $this->server->register();
             } else if (filter_input(INPUT_GET, "client", FILTER_VALIDATE_BOOLEAN) == true) {
@@ -71,7 +71,7 @@ class MOTDAuth {
             }
 
             return;
-        } else if ($this->motdh->get_script_filename() == "redirect.php") {
+        } else if ($_SERVER["PHP_SELF"] == "redirect.php") {
             $this->client->load_url();
             return;
         }

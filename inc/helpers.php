@@ -24,14 +24,6 @@ class MOTDHelpers
 	}
 
     /*
-     * Returns the calling script filename
-     */
-    public function get_script_filename ()
-    {
-        return $_SERVER["PHP_SELF"];
-    }
-
-    /*
      * Simple method to create the JSON Responses
      */
     public function create_response($token, $is_blocked, $msg, $success)

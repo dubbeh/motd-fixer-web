@@ -33,7 +33,7 @@ class MOTDClient
 
     public function is_valid ($check_url = true)
     {
-        return ($this->steamid64) && ($this->client_ip) && ($check_url ? $this->panel_url : true);
+        return $this->steamid64 && $this->client_ip && ($check_url ? $this->panel_url : true);
     }
 
     public function register_url ()
@@ -88,6 +88,7 @@ class MOTDClient
                 ->bind(":client_ip", $this->client_ip)
                 ->single();
             if ($result) {
+
                 $this->panel_url = $result["panel_url"];
                 if ($result["panel_hidden"]) {
                     printf("<object width=\"960\" height=\"700\" data=\"%s\" type=\"text/html\"></object>", $this->panel_url);

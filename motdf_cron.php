@@ -19,11 +19,15 @@
 
 require_once ("inc/auth.php");
 
+$_SERVER["PHP_SELF"] = "motdf_cron.php";
+
 $db = new MOTDDB();
-$server = new MOTDServer($db, null);
+$motdh =  new MOTDHelpers();
+$server = new MOTDServer($db, $motdh);
 
 $server->cleanup_db();
 
 unset($server);
+unset($motdh);
 unset($db);
 ?>

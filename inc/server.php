@@ -28,11 +28,13 @@ class MOTDServer
         $this->sent_ip = filter_input(INPUT_POST, "serverip", FILTER_VALIDATE_IP);
         $this->sent_port = filter_input(INPUT_POST, "serverport", FILTER_VALIDATE_INT);
         
-        if ($this->motdh->get_script_filename() == "redirect.php") {
+        if ($_SERVER["PHP_SELF"] == "redirect.php") {
             $this->server_token = $this->get_token();
-        } else if ($this->motdh->get_script_filename() == "register.php") {
+        } else if ($_SERVER["PHP_SELF"] == "register.php") {
             $this->server_token = filter_input(INPUT_POST, "servertoken", FILTER_SANITIZE_STRING);
             $this->server_name = filter_input(INPUT_POST, "servername", FILTER_SANITIZE_STRING);
+        } else if ($_SERVER["PHP_SELF"] == "motdf_cron.php") {
+            printf("Running database cleanup cronjob.\n");
         } else {
             $this->motdh->create_response(
                 0,
