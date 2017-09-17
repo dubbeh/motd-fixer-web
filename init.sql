@@ -21,5 +21,6 @@ CREATE TABLE IF NOT EXISTS servers (
 	real_ip VARCHAR(65),
 	server_token VARCHAR(65),
 	is_blocked TINYINT(1),
-	created_at BIGINT UNSIGNED
+	created_at BIGINT UNSIGNED,
+	hits INT UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;

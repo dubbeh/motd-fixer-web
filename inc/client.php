@@ -62,7 +62,8 @@ class MOTDClient
                 ->bind(":panel_height", $this->panel_height)
                 ->bind(":created_at", time())
                 ->execute();
-            
+
+            $this->server->increment_hits();
             $this->motdh->create_response(0, false, "Client URL Registered.", $result);
         } else {
             $this->motdh->create_response(0, $this->server->is_blocked(), "Error registering URL.", false);
