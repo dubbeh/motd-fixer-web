@@ -40,5 +40,5 @@ define("AUTH_ALLOWED_IPS", array (
 	"192.168.0.1"));
 
 // Enable debug logging to motdf_log.txt in the base directory
-define("MOTDF_DEBUG", true);
+define("MOTDF_DEBUG", false);
 ?>
