@@ -41,7 +41,7 @@ class MOTDHelpers
     public function log_to_file ($data)
     {
         if (MOTDF_DEBUG) {
-            $fp = fopen("..\motdf_log.txt", "a+");
+            $fp = fopen("../motdf_log.txt", "a+");
             if ($fp) {
                 fwrite($fp, date(DATE_RFC2822). ": ");
                 fwrite($fp, $data);
