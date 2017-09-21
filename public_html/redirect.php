@@ -19,7 +19,6 @@ echo "<html>".
 "<head>".
 "<meta http-equiv=\"Pragma\" content=\"no-cache\">".
 "<meta http-equiv=\"Expires\" content=\"-1\">".
-//"<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>".
 "<title>MOTD Redirection Service</title>".
 "</head>".
 "<body>".

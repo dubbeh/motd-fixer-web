@@ -42,19 +42,28 @@ class MOTDAuth {
 
     private function auth_ip()
     {
+        $this->motdh->log_to_file("auth->auth_ip : php_self=".$_SERVER["PHP_SELF"]);
+
         if ($this->is_ip_allowed()) {
-            if ($_SERVER["PHP_SELF"] == "register.php") {
-                if (filter_input(INPUT_GET, "server", FILTER_VALIDATE_BOOLEAN) == true) {
-                    $this->motdh->create_response(0, false, "No need to register using IP based authentication.", false);
-                    return;
-                } else if (filter_input(INPUT_GET, "client", FILTER_VALIDATE_BOOLEAN) == true) {
-                    $this->client->register_url();
-                    return;
-                }
-            } else if ($_SERVER["PHP_SELF"] == "redirect.php") {
+            $this->motdh->log_to_file("auth->auth_ip : ip check passed");
+            if ($_SERVER["PHP_SELF"] == "redirect.php") {
                 $this->client->load_url();
                 return;
+            } else if ($this->server->is_valid(true)) {
+                $this->motdh->log_to_file("auth->auth_ip : server->is_valid() passed");
+                if ($_SERVER["PHP_SELF"] == "register.php") {
+                    if (filter_input(INPUT_GET, "server", FILTER_VALIDATE_BOOLEAN) == true) {
+                        $this->motdh->create_response(0, false, "No need to register using IP based authentication.", false);
+                    } else if (filter_input(INPUT_GET, "client", FILTER_VALIDATE_BOOLEAN) == true) {
+                        $this->client->register_url();
+                    }
+                } else if ($_SERVER["PHP_SELF"] == "delete.php") {
+                    $this->client->delete_urls();
+                }
+
+                return;
             }
+
             $this->motdh->create_response(0, false, "Auth IP: Invalid Usage.", false);
         } else {
             $this->motdh->create_response(0, true, "IP not allowed to use this script.", false);
@@ -63,20 +72,27 @@ class MOTDAuth {
 
     private function auth_registration()
     {
-        if ($_SERVER["PHP_SELF"] == "register.php" && $this->server->is_valid(true)) {
-            if (filter_input(INPUT_GET, "server", FILTER_VALIDATE_BOOLEAN) == true) {
-                $this->server->register();
-            } else if (filter_input(INPUT_GET, "client", FILTER_VALIDATE_BOOLEAN) == true) {
-                $this->client->register_url();
-            }
+        $this->motdh->log_to_file("auth->auth_registration : php_self=".$_SERVER["PHP_SELF"]);
 
-            return;
-        } else if ($_SERVER["PHP_SELF"] == "redirect.php") {
+        if ($_SERVER["PHP_SELF"] == "redirect.php") {
+            $this->motdh->log_to_file("auth->auth_registration : running client->load_url()");
             $this->client->load_url();
+            return;
+        } else if ($this->server->is_valid(true)) {
+            $this->motdh->log_to_file("auth->auth_registration : running server->is_valid() passed code");
+            if ($_SERVER["PHP_SELF"] == "register.php") {
+                if (filter_input(INPUT_GET, "server", FILTER_VALIDATE_BOOLEAN) == true) {
+                    $this->server->register();
+                } else if (filter_input(INPUT_GET, "client", FILTER_VALIDATE_BOOLEAN) == true) {
+                    $this->client->register_url();
+                }
+            } else if ($_SERVER["PHP_SELF"] == "delete.php") {
+                $this->client->delete_urls();
+            }
             return;
         }
 
-        $this->motdh->create_response(0, false, "Auth unknown usage", false);
+        $this->motdh->create_response(0, false, "Auth Registration: Invalid usage", false);
     }
 
     private function is_ip_allowed()

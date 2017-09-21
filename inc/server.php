@@ -30,7 +30,7 @@ class MOTDServer
         
         if ($_SERVER["PHP_SELF"] == "redirect.php") {
             $this->server_token = $this->get_token();
-        } else if ($_SERVER["PHP_SELF"] == "register.php") {
+        } else if ($_SERVER["PHP_SELF"] == "register.php" || $_SERVER["PHP_SELF"] == "delete.php") {
             $this->server_token = filter_input(INPUT_POST, "servertoken", FILTER_SANITIZE_STRING);
             $this->server_name = filter_input(INPUT_POST, "servername", FILTER_SANITIZE_STRING);
         } else if ($_SERVER["PHP_SELF"] == "motdf_cron.php") {
@@ -208,7 +208,7 @@ class MOTDServer
             " created_at <= :created_at")
             ->bind (":created_at", time() + 3600)
             ->executeRows();
-        printf("Deleted %d old links entries from the database\n", $count);
+        printf("Deleted %d old link entries from the database\n", $count);
     }
 
     public function increment_hits()
