@@ -15,19 +15,25 @@
  *
  * WARNING: KEEP THIS OUTSIDE YOUR ACCESSIBLE WEBSPACE FOLDER
  *
+ * Make sure to set permissions to 0755
+ *
  */
 
-require_once ("inc/auth.php");
+require_once ("config.php");
+require_once ("inc/db.php");
 
-$_SERVER["PHP_SELF"] = "motdf_cron.php";
 
 $db = new MOTDDB();
-$motdh =  new MOTDHelpers();
-$server = new MOTDServer($db, $motdh);
+printf("Running the MOTD Fixer database clean up.\r\n");
 
-$server->cleanup_db();
+// Cleanup old link entries - Anything older than 5 minutes
+$count = $db->query("DELETE FROM ".LINKS_TABLE_NAME.
+	" WHERE".
+	" created_at <= :created_at")
+	->bind (":created_at", time() + 300)
+    ->executeRows();
 
-unset($server);
-unset($motdh);
+printf("Deleted %d old link entries from the database\r\n", $count);
+
 unset($db);
 ?>

@@ -33,8 +33,6 @@ class MOTDServer
         } else if ($_SERVER["PHP_SELF"] == "register.php" || $_SERVER["PHP_SELF"] == "delete.php") {
             $this->server_token = filter_input(INPUT_POST, "servertoken", FILTER_SANITIZE_STRING);
             $this->server_name = filter_input(INPUT_POST, "servername", FILTER_SANITIZE_STRING);
-        } else if ($_SERVER["PHP_SELF"] == "motdf_cron.php") {
-            printf("Running database cleanup cronjob.\n");
         } else {
             $this->motdh->create_response(
                 0,
@@ -198,17 +196,6 @@ class MOTDServer
             ->bind(":is_blocked", false)
             ->bind(":created_at", time())
             ->execute();
-    }
-
-    public function cleanup_db ()
-    {
-        // Cleanup old link entries - anything older than 1 hour
-        $count = $this->dbh->query("DELETE FROM ".LINKS_TABLE_NAME.
-            " WHERE".
-            " created_at <= :created_at")
-            ->bind (":created_at", time() + 3600)
-            ->executeRows();
-        printf("Deleted %d old link entries from the database\n", $count);
     }
 
     public function increment_hits()
