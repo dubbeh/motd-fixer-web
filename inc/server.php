@@ -197,31 +197,6 @@ class MOTDServer
             ->bind(":created_at", time())
             ->execute();
     }
-
-    public function increment_hits()
-    {
-        $result = $this->dbh->query("SELECT * FROM ".SERVERS_TABLE_NAME.
-            " WHERE".
-            " sent_ip = :sent_ip".
-            " AND".
-            " sent_port = :sent_port".
-            " AND".
-            " server_token = :server_token")
-            ->bind(":sent_ip", $this->sent_ip)
-            ->bind(":sent_port", $this->sent_port)
-            ->bind(":server_token", $this->server_token)
-            ->single();
-
-        if ($result)
-        {
-            $this->dbh->query("UPDATE ".SERVERS_TABLE_NAME.
-                " SET hits = :hits".
-                " WHERE ind = :ind")
-            ->bind(":hits", $result['hits'] + 1)
-            ->bind(":ind", $result['ind'])
-            ->execute();
-        }
-    }
 }
 
 ?>

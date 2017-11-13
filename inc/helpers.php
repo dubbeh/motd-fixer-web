@@ -26,14 +26,15 @@ class MOTDHelpers
     /*
      * Simple method to create the JSON Responses
      */
-    public function create_response($token, $is_blocked, $msg, $success)
+    public function create_response($token, $is_blocked, $msg, $success, $token_valid = false)
     {
         return printf(json_encode(
                 array (
                     "token" => $token,
                     "is_blocked" => $is_blocked,
                     "msg" => $msg,
-                    "success" => $success
+                    "success" => $success,
+                    "is_token_valid" => $token_valid
                 )
             ));
     }
@@ -43,7 +44,7 @@ class MOTDHelpers
         if (MOTDF_DEBUG) {
             $fp = fopen("../motdf_log.txt", "a+");
             if ($fp) {
-                fwrite($fp, date(DATE_RFC2822). ": ");
+                fwrite($fp, date(DATE_RFC2822). " : ");
                 fwrite($fp, $data);
                 fwrite($fp, "\r\n");
                 fclose($fp);

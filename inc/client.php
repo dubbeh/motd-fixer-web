@@ -83,11 +83,10 @@ class MOTDClient
                 ->bind(":created_at", time())
                 ->execute();
 
-            $this->server->increment_hits();
-            $this->motdh->create_response(0, false, "Client URL Registered.", $result);
+            $this->motdh->create_response(0, false, "Client URL Registered.", $result, true);
         } else {
             $this->motdh->log_to_file("client->register_url : checks failed");
-            $this->motdh->create_response(0, $this->server->is_blocked(), "Error registering URL.", false);
+            $this->motdh->create_response(0, $this->server->is_blocked(), "Error registering URL.", false, $this->server->is_token_valid());
         }
     }
 
